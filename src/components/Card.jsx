@@ -1,97 +1,122 @@
-import React, { useState } from 'react'
-import shoes from '../assets/vapoorfly-1.png'
+import React, { useEffect, useState } from "react";
+import shoes from "../assets/vapoorfly-1.png";
 
 const Card = () => {
 
-    const [count, setCount] = useState(0);
+  // ------------ M A I N - L O G I C -------------
 
-    const handleIncrement = ()=>{
+          const [count, setCount] = useState(0);
 
-        setCount(count + 1);
+          // ------ I N C R E A M E N T - F U N C T I O N ---------
 
-    }
+          const handleIncrement = () => {
 
-    const handleDecrement = ()=>{
+            let increaseCount = count + 1
+            localStorage.setItem("count", JSON.stringify(increaseCount));
+            setCount(increaseCount)
 
-        
-        if(count !== 0){
-            setCount(count - 1);
-        }
+          };
 
-        
+          // --------- D E C R E M E N T - F U N C T I O N ----------
 
-    }
+          const handleDecrement = () => {
 
-    let deliveryCharges = 0;
+            let decreaseCount = count > 0 ? count - 1: 0;
+            localStorage.setItem("count", JSON.stringify(decreaseCount))
+            setCount(decreaseCount)
+            
+          };
+
+          // -------- U S E - E F F E C T --------- 
+
+          useEffect(()=>{
+
+            let oldCount = JSON.parse(localStorage.getItem("count"))
+            setCount(oldCount)
+
+          },[])
+
+          // ------- E X T R A - V A R I A B L E --------
+          
+          let deliveryCharges = count > 0 ? 600 : 0;
+          let price = 22000;
+          let quantityPrice = price * count;
     
-    if (count !== 0){
-        deliveryCharges = 600;
-    }
-    else{
-        deliveryCharges = 0;
-    }
-
-    let price = 22000
-    let quantityPrice = price*count;
-
-
+     // ------------ M A I N - L O G I C -------------
 
   return (
     <>
       <section className="flex justify-center items-center h-screen">
-        <div className="grid grid-cols-2">
-          <div class="flex my-5 p-10">
-            <img src={shoes} class="w-50 h-50" alt="" />
-            <div class="bag=product-content ms-5">
-              <h5 class="font-semibold text-lg">Nike Vaporfly 4</h5>
-              <p class="text-lg text-slate-500">Men's Road Racing Shoes</p>
-              <p class="font-semibold text-lg">MRP: ₹{price}</p>
-              <p class="font-semibold text-lg"></p>
+        <div className="shadow-2xl rounded-2xl">
+          <div className="grid grid-cols-2">
+            <div className="flex my-5 p-10">
+              <img src={shoes} className="w-50 h-50" alt="" />
+              <div className="bag-product-content ms-5">
+                <h5 className="font-semibold text-lg">Nike Vaporfly 4</h5>
+                <p className="text-lg text-slate-500">Men's Road Racing Shoes</p>
+                <p className="font-semibold text-lg">MRP: ₹{price}</p>
 
-              <div class="quantity-button flex items-center gap-3 mt-5">
-                <button class="decrement bg-slate-100 p-2 rounded-full" onClick={handleDecrement}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-                  </svg>
-                </button>
-                <span class="text-xl">{count}</span>
-                <button class="increment bg-slate-100 p-2 rounded-full" onClick={handleIncrement}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                  </svg>
-                </button>
+                {/* -------------- I N C R E M E N T - D E C R E M E N T - B U T T O N -------------- */}
+
+                <div className="quantity-button flex items-center gap-3 mt-5">
+                  <button className="decrement cursor-pointer" onClick={handleDecrement}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-10">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                  <span className="text-xl">{count}</span>
+                  <button className="increment cursor-pointer" onClick={handleIncrement}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-10">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="bag-items-prices p-10">
-            <div class="bag-items-price-title">
-              <h2 class="text-3xl font-semibold">Summary</h2>
-            </div>
-            <div class="bag-items-price-content mt-10">
-              <ul class="w-100">
-                <li class="flex items-center justify-between mb-3">
-                  <p class="text-xl font-semibold">Subtotal</p>
-                  <p class="text-xl subtotal-price">₹{quantityPrice}</p>
-                </li>
-                <li class="flex items-center justify-between border-b-1 pb-3">
-                  <p class="text-xl font-semibold">Estimated Delivery & Handling</p>
-                  <p class="text-xl delivery-charges">₹{deliveryCharges}</p>
-                </li>
-                <li class="flex items-center justify-between mt-3">
-                  <p class="text-xl font-semibold">Total</p>
-                  <p class="total-price text-xl">₹{quantityPrice + deliveryCharges}</p>
-                </li>
-                <li>
-                  <button class="bg-black hover:bg-gray-700 text-white cursor-pointer px-5 py-2 rounded mt-10">Buy Now</button>
-                </li>
-              </ul>
+            {/* ------------ P R I C E - S U M M A R Y -------------- */}
+
+            <div className="bag-items-prices p-10">
+              <div className="bag-items-price-title">
+                <h2 className="text-3xl font-semibold">Summary</h2>
+              </div>
+              <div className="bag-items-price-content mt-10">
+                <ul className="w-100">
+                  <li className="flex items-center justify-between mb-3">
+                    <p className="text-xl font-semibold">Subtotal</p>
+                    <p className="text-xl subtotal-price">₹{quantityPrice}</p>
+                  </li>
+                  <li className="flex items-center justify-between border-b-1 pb-3">
+                    <p className="text-xl font-semibold">Estimated Delivery & Handling</p>
+                    <p className="text-xl delivery-charges">₹{deliveryCharges}</p>
+                  </li>
+                  <li className="flex items-center justify-between mt-3">
+                    <p className="text-xl font-semibold">Total</p>
+                    <p className="total-price text-xl">₹{quantityPrice + deliveryCharges}</p>
+                  </li>
+                  <li>
+                    <button className="bg-black hover:bg-gray-700 text-white cursor-pointer px-5 py-2 rounded mt-10">Buy Now</button>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </section>
     </>
   );
-}
+};
 
-export default Card
+export default Card;
